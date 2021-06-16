@@ -15,6 +15,7 @@ const userController = {
     User.findOne({ _id: params.id })
     // include thoughts, friends for user; front end will place these on the UI for the page
     .populate([
+      //select everything but the version with select: "-__v"
       { path: 'thoughts', select: "-__v" },
       { path: "friends", select: "-__v"}
     ])
