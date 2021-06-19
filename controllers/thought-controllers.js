@@ -71,6 +71,22 @@ const thoughtControllers = {
         res.json(result);
       });
   },
+
+  addReaction({ params, body }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.id },
+      { $push: { reaction: body }},
+      { new: true }
+    )
+    .then(result => res.json(result))
+    .catch(err => res.json(err))
+  },
+
+  deleteReaction({ params }, res) {
+    Thought.findOneAndUpdate({ _id: params.id })
+    .then(result => res.json(result))
+    .catch(err => res.json(err))
+  }
 };
 
 module.exports = thoughtControllers;
