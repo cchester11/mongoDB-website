@@ -71,10 +71,10 @@ const userController = {
       .catch((err) => res.status(400).json(err));
   },
 
-  addFriend({ params, body }, res) {
+  addFriend({ params }, res) {
     User.findOneAndUpdate(
       { _id: params.userId },
-      { $addToSet: { friends: body } },
+      { $addToSet: { friends: params.friendId } },
       { new: true }
     )
     .then(result => {
@@ -87,9 +87,18 @@ const userController = {
     .catch(err => res.json(err))
   },
 
-  deleteFriend({ params }) {
-    User.findOneAndUpdate({ _id: params.id })
-    .then(result => res.json(result))
+  deleteFriend({ params }, res) {
+    User.findOneAndUpdate(
+      { _id: params.userId },
+      { $pull: { friends: params.friendId} },
+      { new: true }
+      )
+    .then(result => {
+      if(!result) {
+        res.status(404).json({ message: "Not found" })
+      }
+      res.json(result)
+    })
     .catch(err => res.json(err))
   },
 };
